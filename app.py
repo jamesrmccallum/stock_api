@@ -6,8 +6,9 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-NAMESPACE = 'stocksocket'
+NAMESPACE = '/stocksocket'
 NEW_STOCK_ADDED = 'new stock'
+NEW_STOCK_BCAST = 'new stock broadcast'
 CONNECT_ACK = 'Connect ack'
 PORT = int(os.getenv('PORT'))
 
@@ -22,9 +23,8 @@ def test_message(message):
     emit('my response', {'data': message['data']})
 
 
-@socketio.on('my broadcast event', namespace=NAMESPACE)
 def notify_listeners(message):
-    emit('my response', {'data': message['data']}, broadcast=True)
+    emit(NEW_STOCK_BCAST, {'data': message['data']}, broadcast=True)
 
 
 @socketio.on('connect', namespace=NAMESPACE)
