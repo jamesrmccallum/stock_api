@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 
@@ -7,6 +8,7 @@ socketio = SocketIO(app)
 
 NAMESPACE = 'stocksocket'
 NEW_STOCK_ADDED = 'new stock'
+CONNECT_ACK = 'Connect ack'
 PORT = int(os.getenv('PORT'))
 
 
@@ -27,7 +29,8 @@ def notify_listeners(message):
 
 @socketio.on('connect', namespace=NAMESPACE)
 def test_connect():
-    emit('my response', {'data': 'Connected'})
+    logging.info('Client connected')
+    emit(CONNECT_ACK, {'data': 'Connected'})
 
 
 @socketio.on('disconnect', namespace=NAMESPACE)
