@@ -13,3 +13,5 @@ docker-compose.yml
 
 #VSCODE
 .vscode
+
+*.pyc

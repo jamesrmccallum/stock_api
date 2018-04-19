@@ -32,14 +32,7 @@ def bcast_stock_remove(message):
 
 @socketio.on('connect', namespace=NAMESPACE)
 def test_connect():
-    print('Client connected')
     emit(CONNECT_ACK, {'data': 'Connected'})
-
-
-@socketio.on('disconnect', namespace=NAMESPACE)
-def test_disconnect():
-    print('Client disconnected')
-
 
 if __name__ == '__main__':
     socketio.run(app, port=PORT)
