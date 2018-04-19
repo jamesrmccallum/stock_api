@@ -9,6 +9,8 @@ socketio = SocketIO(app)
 NAMESPACE = '/stocksocket'
 NEW_STOCK_ADDED = 'Add new stock'
 NEW_STOCK_BCAST = 'new stock broadcast'
+STOCK_REMOVED = 'Stock removed'
+STOCK_REMOVED_BCAST = 'stock removed broadcast'
 CONNECT_ACK = 'Connect ack'
 PORT = int(os.getenv('PORT'))
 
@@ -19,9 +21,13 @@ def index():
 
 
 @socketio.on(NEW_STOCK_ADDED, namespace=NAMESPACE)
-def notify_listeners(message):
-    print(message['symbol'])
+def bcast_new_stock(message):
     emit(NEW_STOCK_BCAST, {'symbol': message['symbol']}, broadcast=True)
+
+
+@socketio.on(STOCK_REMOVED, namespace=NAMESPACE)
+def bcast_stock_remove(message):
+    emit(STOCK_REMOVED_BCAST, {'symbol': message['symbol']}, broadcast=True)
 
 
 @socketio.on('connect', namespace=NAMESPACE)
