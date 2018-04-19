@@ -7,7 +7,7 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 NAMESPACE = '/stocksocket'
-NEW_STOCK_ADDED = 'new stock'
+NEW_STOCK_ADDED = 'Add new stock'
 NEW_STOCK_BCAST = 'new stock broadcast'
 CONNECT_ACK = 'Connect ack'
 PORT = int(os.getenv('PORT'))
@@ -18,18 +18,15 @@ def index():
     return "Hello!"
 
 
-@socketio.on('my event', namespace=NAMESPACE)
-def test_message(message):
-    emit('my response', {'data': message['data']})
-
-
+@socketio.on(NEW_STOCK_ADDED, namespace=NAMESPACE)
 def notify_listeners(message):
-    emit(NEW_STOCK_BCAST, {'data': message['data']}, broadcast=True)
+    print(message['symbol'])
+    emit(NEW_STOCK_BCAST, {'symbol': message['symbol']}, broadcast=True)
 
 
 @socketio.on('connect', namespace=NAMESPACE)
 def test_connect():
-    logging.info('Client connected')
+    print('Client connected')
     emit(CONNECT_ACK, {'data': 'Connected'})
 
 
